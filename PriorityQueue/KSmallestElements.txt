@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+vector<int> kSmallest(int *input, int n, int k) {
+	
+    // gives the time complexity of O( n+k(logk) ) and if k is small will give O(n)
+    // time complexity for push and pop operation of priority queue is O(log(P)) where is P is the element to be inserted as the height 
+    // of complete binary tree is log(n) n is total number of elements.
+    priority_queue<int> pq;
+    for(int i = 0; i < k; i++){ // O(klogk)
+        pq.push(input[i]);
+    }
+    for(int i = k; i < n; i++){ // O(n-klogk)
+        int max = pq.top();
+        if(input[i] < max){
+            pq.pop();
+            pq.push(input[i]);
+        }
+    }
+    vector<int> v;
+    while(!pq.empty()){ // O(klogk)
+        int data = pq.top();
+        v.push_back(data);
+        pq.pop();
+    }
+    return v;
+}
+int main() {
+    int n;
+    cin >> n;
+    int input[n];
+    for(int i = 0; i < n; i++){
+        cin >> input[i];
+    }
+    int k;
+    cin >> k;
+
+    vector<int> output = kSmallest(input,n,k);
+
+    for(int i = 0; i < output.size(); i++){
+        cout << output[i] << " ";
+    }
+}
