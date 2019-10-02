@@ -1,0 +1,18 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+    priority_queue<int> pq;
+    pq.push(15);
+    pq.push(78);
+    pq.push(80);
+    pq.push(1);
+    pq.push(100);
+
+    cout << pq.size() << endl;
+    cout << pq.top() << endl;
+
+    while(!pq.empty()){
+        cout << pq.top() << endl;
+        pq.pop();
+    }
+}
