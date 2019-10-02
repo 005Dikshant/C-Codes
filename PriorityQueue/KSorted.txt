@@ -1,0 +1,36 @@
+#include <iostream>
+#include <queue>
+using namespace std;
+//sorted is performed in decreasing order
+// k sorted means for element to move its right position k-1 distance from left and k-1 from right
+// so using priorty(max_priorty) queue and making queue of first K elements.
+void KsortedArray(int *input,int n,int k){
+    priority_queue<int> pq;
+
+    for(int i = 0; i < k; i++){
+        pq.push(input[i]);
+    }
+
+    int j = 0;
+    for(int i = k; i < n; i++){
+        input[j] = pq.top();
+        pq.pop();
+
+        pq.push(input[i]);
+        j++;
+    }
+    while(!pq.empty()){
+        input[j] = pq.top();
+        pq.pop();
+    }
+}
+int main() {
+    int n;
+    cin >> n;
+    int input[n];
+    for(int i = 0; i < n; i++){
+        cin >> input[i];
+    }
+    int k = 3;
+    KsortedArray(input,n,k);
+}
