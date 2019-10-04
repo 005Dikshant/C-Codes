@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+int buyTicket (int *arr, int n, int k){
+   priority_queue<int> pq;
+
+   int mypriority = arr[k];
+   for(int i = 0; i < n; i++){
+       pq.push(arr[i]);
+   }
+   int maxElement = 0,prevMax = 0;
+   int counter = 0;
+   while(!pq.empty()){
+       maxElement = pq.top();
+
+       if(maxElement == mypriority){
+           int i = 0;
+           for(; i < n; i++){
+               if(arr[i] == prevMax){break;}
+           }
+           if(i > k){
+               for(int j = 0; j < i; j++){
+                if(arr[j] == mypriority){
+                   counter++;
+               }
+               if(j == k){
+                   return counter;
+               }
+            }
+        }  
+          for(int j = i+1; j < n;j++){
+            if(arr[j] == mypriority){
+                counter++;
+            }
+            if(j == k){
+                return counter;
+            }
+        }
+    }
+       prevMax = maxElement;
+       pq.pop();
+       counter++;
+   }
+}
+int main() {
+    int n, k, s;
+    cin>>n;
+    int *arr = new int[n];
+    for(int i = 0; i < n; i++){
+        cin >> arr[i];
+    }
+    cin >> k;
+    int ans = buyTicket(arr, n, k);
+    cout << ans << endl;
+}
