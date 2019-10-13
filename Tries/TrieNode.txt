@@ -1,0 +1,126 @@
+#include <iostream>
+using namespace std;
+class TrieNode{
+    public:
+        char data;
+        bool isTerminal;
+        TrieNode **children;
+
+        TrieNode(char data){
+            this->data = data;
+            isTerminal = false;
+            children = new TrieNode*[26];
+            for(int i = 0; i < 26;i++){
+                children[i] = NULL;
+            }
+        }
+};
+class Trie{
+    TrieNode *root;
+    public:
+        Trie(){
+            root = new TrieNode('\0');
+        }
+        void insertHelper(string input,TrieNode *root){
+            if(input.size() == 0){
+                root->isTerminal = true; // making the last char as terminal showing that word end there
+                return;
+            }
+            int index = input[0] - 'a'; // finding the index of the required char where it has to be placed in 26 chars 
+            TrieNode *child;
+            if(root->children[index] != NULL){
+                child = root->children[index];
+            }else{
+                child = new TrieNode(input[0]);
+                root->children[index] = child;
+            }
+            insertHelper(input.substr(1),child);
+        } 
+        bool searchHelper(string input,TrieNode *root){
+            if(input.size() == 0){
+                return root->isTerminal;
+            }
+            int index = input[0] - 'a';
+            TrieNode *child;
+            if(root->children[index] != NULL){
+                child = root->children[index];
+            }else{
+                return false;
+            }
+            return searchHelper(input.substr(1),child);
+        }
+        void removeHelper(string input, TrieNode *root){
+            if(input.size() == 0){
+                root->isTerminal = false; // making that word last char as non terminal
+                return;
+            }
+            int index = input[0] - 'a';
+            TrieNode *child;
+            if(root->children[index] != NULL){
+                child = root->children[index];
+            }else{
+                return;
+            }
+            removeHelper(input.substr(1),child);
+            if(child->isTerminal == false){ // seeing that char should non terminal and it should have no childs
+                for(int i = 0; i < 26; i++){
+                    if(child->children[i] !=  NULL){ // if he has childs dont remove him
+                        return;
+                    }
+                }
+                delete child; // otherwise remove that char
+                root->children[index] = NULL;
+            }
+            
+        }
+        bool search(string input){
+            return searchHelper(input,root);
+        }
+        void insert(string input){
+            insertHelper(input,root);
+        }
+        void remove(string input){
+            removeHelper(input,root);
+        }
+};
+int main() {
+    Trie obj;
+    obj.insert("apple");
+    obj.insert("above");
+    obj.insert("abroad");
+
+    cout << obj.search("above") << endl;
+    cout << obj.search("apple") << endl;
+    cout << obj.search("alliance") << endl;
+
+    obj.insert("back");
+    obj.insert("baseball");
+    obj.insert("bit");
+
+    cout << obj.search("best") << endl;
+    cout << obj.search("baseball") << endl;
+    cout << obj.search("boy") << endl;
+
+    obj.insert("cat");
+    obj.insert("cent");
+    obj.insert("core");
+
+    cout << obj.search("core") << endl;
+    cout << obj.search("continue") << endl;
+    cout << obj.search("cat") << endl;
+
+    obj.insert("dashing");
+
+    cout << obj.search("doll") << endl;
+
+    obj.remove("apple");
+    obj.remove("back");
+    obj.remove("cat");
+    obj.remove("dashing");
+    
+    cout << "After Removing" << endl;
+    cout << obj.search("apple") << endl;
+    cout << obj.search("back") << endl;
+    cout << obj.search("cat") << endl;
+    cout << obj.search("dashing") << endl;
+}
