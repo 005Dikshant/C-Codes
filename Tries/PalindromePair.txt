@@ -1,0 +1,98 @@
+#include <iostream>
+using namespace std;
+#include<bits/stdc++.h>
+class TrieNode {
+	public :
+	char data;
+	TrieNode **children;
+	bool isTerminal;
+	int childCount;
+
+	TrieNode(char data) {
+		this -> data = data;
+		children = new TrieNode*[26];
+		for(int i = 0; i < 26; i++) {
+			children[i] = NULL;
+		}
+		isTerminal = false;
+		childCount = 0;
+	}
+};
+
+class Trie {
+	TrieNode *root;
+
+	public :
+	int count;
+
+	Trie() {
+		this->count = 0;
+		root = new TrieNode('\0');
+	}
+
+	bool insertWord(TrieNode *root, string word) {
+		// Base case
+		if(word.size() == 0) {
+			if (!root->isTerminal) {
+				root -> isTerminal = true;
+				return true;	
+			} else {
+				return false;
+			}
+		}
+
+		// Small Calculation
+		int index = word[0] - 'a';
+		TrieNode *child;
+		if(root -> children[index] != NULL) {
+			child = root -> children[index];
+		}
+		else {
+			child = new TrieNode(word[0]);
+			root -> children[index] = child;
+			root->childCount++;
+		}
+
+		// Recursive call
+		return insertWord(child, word.substr(1));
+	}
+
+	// For user
+	void insertWord(string word) {
+		if (insertWord(root, word)) {
+			this->count++;
+		}
+	}
+
+	bool isPalindrome(string s){
+        string re = s;
+        reverse(re.begin(),re.end());
+        
+        return re == s;
+    }
+
+	bool findIfPalindromePair(vector<string> arr) {
+		for(int i = 0; i < arr.size(); i++){
+            string s = arr[i];
+            insertWord(s);
+        }
+        for(int i = 0; i < arr.size(); i++){
+            string s = arr[i];
+            
+            if( isPalindrome(s) )return true;
+            
+            for(int j = 0 ; j < arr.size(); j++){
+                string s1 = arr[j];
+                if(i == j) continue;
+                
+                string combine = s + s1;
+                if( isPalindrome(combine) )return true;
+            }
+        }
+        return false;
+	}
+};
+
+int main() {
+    cout<<"Hello World!";
+}
