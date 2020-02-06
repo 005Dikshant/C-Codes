@@ -1,0 +1,25 @@
+#include <iostream>
+using namespace std;
+void printSubsetSumToK(int input[], int size, int k,string output) {
+    if(k == 0){
+        cout << output << endl;
+        return;
+    }
+    if(size == 0 || k < 0){
+        return;
+    }   
+    printSubsetSumToK(input+1,size-1,k-input[0],output+to_string(input[0])+" ");
+    printSubsetSumToK(input+1,size-1,k,output);
+}
+int main() {
+    int size;
+    cin >> size;
+
+    int input[size];
+    for(int i = 0; i < size; i++){
+        cin >> input[i];
+    }
+    int k;
+    cin >> k;
+    printSubsetSumToK(input,size,k,"");
+}

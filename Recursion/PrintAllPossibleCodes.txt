@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+char getCode(int input){
+    return 96 + input;
+}
+void printAllPossibleCodes(string input,string output) {
+    if(input.size() == 0){
+        cout << output << endl;
+        return;
+    }
+    printAllPossibleCodes(input.substr(1),output+getCode(input[0] - '0'));
+    if(stoi(input.substr(0,2)) <= 26 && input.size() > 1){
+        printAllPossibleCodes(input.substr(2),output+getCode(stoi(input.substr(0,2))));
+    }
+}
+int main() {
+    string input;
+    cin >> input;
+    printAllPossibleCodes(input,"");
+}
